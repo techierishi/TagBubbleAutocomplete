@@ -54,8 +54,7 @@ public class AutocompleteCustomArrayAdapter extends ArrayAdapter<KeyValue> {
 					.findViewById(R.id.textViewItem);
 			textViewItem.setText(objectItem.getValue());
 
-			// in case you want to add some style, you can do something like:
-			textViewItem.setBackgroundColor(Color.CYAN);
+			
 
 		} catch (NullPointerException e) {
 			e.printStackTrace();
