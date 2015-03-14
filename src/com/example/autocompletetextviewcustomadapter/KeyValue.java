@@ -4,14 +4,24 @@ public class KeyValue {
 
 	String key;
 	String value;
+	boolean shown;
 
 	public KeyValue() {
 
 	}
 
-	public KeyValue(String _key, String _value) {
+	public KeyValue(String _key, String _value, boolean _shown) {
 		this.key = _key;
 		this.value = _value;
+		this.shown = _shown;
+	}
+
+	public boolean isShown() {
+		return shown;
+	}
+
+	public void setShown(boolean shown) {
+		this.shown = shown;
 	}
 
 	public String getKey() {

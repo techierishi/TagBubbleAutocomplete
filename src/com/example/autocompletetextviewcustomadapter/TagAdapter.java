@@ -51,24 +51,26 @@ public class TagAdapter extends BaseAdapter {
 	}
 
 	public View getView(final int position, View convertView, ViewGroup parent) {
+		if (data.get(position).isShown()) {
+			View vi = convertView;
+			ViewHolder holder;
 
-		View vi = convertView;
-		ViewHolder holder;
+			if (convertView == null) {
+				LayoutInflater mInflater = (LayoutInflater) ctx
+						.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+				vi = mInflater.inflate(R.layout.tag, null);
+				holder = new ViewHolder();
+				holder.tag_name = (TextView) vi.findViewById(R.id.tag_name);
 
-		if (convertView == null) {
-			LayoutInflater mInflater = (LayoutInflater) ctx
-					.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-			vi = mInflater.inflate(R.layout.tag, null);
-			holder = new ViewHolder();
-			holder.tag_name = (TextView) vi.findViewById(R.id.tag_name);
+				vi.setTag(holder);
+			} else
+				holder = (ViewHolder) vi.getTag();
 
-			vi.setTag(holder);
-		} else
-			holder = (ViewHolder) vi.getTag();
+			holder.tag_name.setText(data.get(position).getValue());
 
-		holder.tag_name.setText(data.get(position).getValue());
-		
-		return vi;
+			return vi;
+		}
+		return null;
 	}
 
 	public interface OnCartItemDeletedListener {

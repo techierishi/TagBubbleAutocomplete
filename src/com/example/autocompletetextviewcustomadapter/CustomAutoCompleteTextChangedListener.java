@@ -1,5 +1,7 @@
 package com.example.autocompletetextviewcustomadapter;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,10 +11,10 @@ public class CustomAutoCompleteTextChangedListener implements TextWatcher {
 
 	public static final String TAG = "CustomAutoCompleteTextChangedListener.java";
 	Context context;
-	KeyValue[] myObjs;
+	ArrayList<KeyValue> myObjs;
 
 	public CustomAutoCompleteTextChangedListener(Context context,
-			KeyValue[] myObjs) {
+			ArrayList<KeyValue> myObjs) {
 		this.context = context;
 		this.myObjs = myObjs;
 	}
@@ -40,7 +42,8 @@ public class CustomAutoCompleteTextChangedListener implements TextWatcher {
 			MainActivity mainActivity = ((MainActivity) context);
 
 			// get suggestions from the database
-			KeyValue[] myObjs = filterKeyVal(this.myObjs, userInput.toString());
+			ArrayList<KeyValue> myObjs = filterKeyVal(this.myObjs,
+					userInput.toString());
 
 			if (myObjs != null)
 				mainActivity.myAdapter.changeData(myObjs);
@@ -53,25 +56,24 @@ public class CustomAutoCompleteTextChangedListener implements TextWatcher {
 
 	}
 
-	public KeyValue[] filterKeyVal(KeyValue[] kvs, String search) {
+	public ArrayList<KeyValue> filterKeyVal(ArrayList<KeyValue> kvs,
+			String search) {
+		ArrayList<KeyValue> kvs_l = new ArrayList<KeyValue>();
 
-		int j = 0;
 		if (kvs != null) {
-			KeyValue kvs_l[] = new KeyValue[kvs.length];
 
-			for (int i = 0; i <= kvs.length; i++) {
-				if (kvs[i].getValue().trim().contains(search)) {
-					kvs_l[j] = kvs[i];
+			for (KeyValue kvl : kvs) {
+				if (kvl.getValue().trim().toLowerCase()
+						.contains(search.toLowerCase())
+						&& !kvl.isShown()) {
+					kvs_l.add(kvl);
 
-					j++;
 				}
 			}
 
-			return kvs_l;
-
 		}
 
-		return null;
+		return kvs_l;
 	}
 
 }

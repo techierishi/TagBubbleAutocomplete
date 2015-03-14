@@ -36,6 +36,16 @@ public class MainActivity extends Activity {
 			// put sample data to database
 
 			kvArr2 = new ArrayList<KeyValue>();
+
+			kvArr2.add(new KeyValue("0", "Android", false));
+			kvArr2.add(new KeyValue("1", "iOs", false));
+			kvArr2.add(new KeyValue("2", "Java", false));
+			kvArr2.add(new KeyValue("3", "Javascript", false));
+			kvArr2.add(new KeyValue("4", "PHP", false));
+			kvArr2.add(new KeyValue("5", "Ruby", false));
+			kvArr2.add(new KeyValue("6", "Perl", false));
+			kvArr2.add(new KeyValue("7", "Python", false));
+
 			tAdapter = new TagAdapter(this, kvArr2);
 			// autocompletetextview is in activity_main.xml
 			myAutoComplete = (CustomAutoCompleteView) findViewById(R.id.myautocomplete);
@@ -46,32 +56,21 @@ public class MainActivity extends Activity {
 				public void onItemClick(AdapterView<?> parent, View arg1,
 						int pos, long id) {
 
-					RelativeLayout rl = (RelativeLayout) arg1;
-					TextView tv = (TextView) rl.getChildAt(0);
-
-					kvArr2.add(new KeyValue("0", "" + tv.getText().toString()));
+					kvArr2.get(pos).setShown(true);
 
 					tAdapter.changeData(kvArr2);
-					myAutoComplete.setText(tv.getText().toString());
+					myAutoComplete.setText("");
 
 				}
 
 			});
 
-			KeyValue kvArr[] = new KeyValue[5];
-
-			kvArr[0] = new KeyValue("0", "Android");
-			kvArr[1] = new KeyValue("0", "iOs");
-			kvArr[2] = new KeyValue("0", "Java");
-			kvArr[3] = new KeyValue("0", "Javascript");
-			kvArr[4] = new KeyValue("0", "Andy");
-
 			myAutoComplete
 					.addTextChangedListener(new CustomAutoCompleteTextChangedListener(
-							this, kvArr));
+							this, kvArr2));
 
 			myAdapter = new AutocompleteCustomArrayAdapter(this,
-					R.layout.list_view_row_item, kvArr);
+					R.layout.list_view_row_item, kvArr2);
 			myAutoComplete.setAdapter(myAdapter);
 
 			main_wrap_layout = (WrapLayout) findViewById(R.id.main_wrap_layout);
@@ -84,5 +83,4 @@ public class MainActivity extends Activity {
 			e.printStackTrace();
 		}
 	}
-
 }
