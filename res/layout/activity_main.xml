@@ -9,14 +9,14 @@
         android:layout_height="wrap_content"
         android:text="" />
 
-    <com.example.autocompletetextviewcustomadapter.CustomAutoCompleteView
+    <com.tagbubble.autocomplete.lib.CustomAutoCompleteView
         android:id="@+id/myautocomplete"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:completionThreshold="1" >
-    </com.example.autocompletetextviewcustomadapter.CustomAutoCompleteView>
+    </com.tagbubble.autocomplete.lib.CustomAutoCompleteView>
 
-    <com.example.autocompletetextviewcustomadapter.WrapLayout
+    <com.tagbubble.autocomplete.lib.WrapLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/main_wrap_layout"
@@ -27,6 +27,6 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:context=".MainActivity" >
-    </com.example.autocompletetextviewcustomadapter.WrapLayout>
+    </com.tagbubble.autocomplete.lib.WrapLayout>
 
 </LinearLayout>

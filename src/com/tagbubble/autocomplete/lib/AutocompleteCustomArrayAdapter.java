@@ -1,23 +1,25 @@
-package com.example.autocompletetextviewcustomadapter;
+package com.tagbubble.autocomplete.lib;
 
 import java.util.ArrayList;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
-public class AutocompleteCustomArrayAdapter extends BaseAdapter implements
-		Filterable {
+public class AutocompleteCustomArrayAdapter<T extends ACItemClickListener>
+		extends BaseAdapter implements Filterable {
 
 	final String TAG = "AutocompleteCustomArrayAdapter.java";
 
 	Context mContext;
 	int layoutResourceId;
+	ACItemClickListener listener;
 	ArrayList<KeyValue> data = null;
 
 	public AutocompleteCustomArrayAdapter(Context mContext,
@@ -25,6 +27,7 @@ public class AutocompleteCustomArrayAdapter extends BaseAdapter implements
 
 		this.layoutResourceId = layoutResourceId;
 		this.mContext = mContext;
+		this.listener = (T) mContext;
 		this.data = data;
 	}
 
@@ -39,22 +42,40 @@ public class AutocompleteCustomArrayAdapter extends BaseAdapter implements
 	public View getView(int position, View convertView, ViewGroup parent) {
 
 		try {
+			ViewHolder holder = new ViewHolder();
 
 			if (convertView == null) {
 				// inflate the layout
 				LayoutInflater inflater = ((MainActivity) mContext)
 						.getLayoutInflater();
 				convertView = inflater.inflate(layoutResourceId, parent, false);
+
+				holder.textViewItem = (TextView) convertView
+						.findViewById(R.id.textViewItem);
+
+				convertView.setTag(holder);
+			} else {
+				holder = (ViewHolder) convertView.getTag();
 			}
 
 			// object item based on the position
-			KeyValue objectItem = data.get(position);
+			final KeyValue objectItem = data.get(position);
 
-			// get the TextView and then set the text (item name) and tag (item
+			// get the TextView and then set the text (item name) and tag
+			// (item
 			// ID) values
-			TextView textViewItem = (TextView) convertView
-					.findViewById(R.id.textViewItem);
-			textViewItem.setText(objectItem.getValue());
+
+			holder.textViewItem.setText(objectItem.getValue());
+
+			convertView.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View view) {
+					
+					listener.onACItemClickListener(objectItem);
+
+				}
+			});
 
 		} catch (NullPointerException e) {
 			e.printStackTrace();
@@ -64,6 +85,10 @@ public class AutocompleteCustomArrayAdapter extends BaseAdapter implements
 
 		return convertView;
 
+	}
+
+	class ViewHolder {
+		TextView textViewItem;
 	}
 
 	@Override
@@ -106,7 +131,6 @@ public class AutocompleteCustomArrayAdapter extends BaseAdapter implements
 		@Override
 		protected void publishResults(CharSequence constraint,
 				FilterResults results) {
-			
 
 			ArrayList<KeyValue> allMatching = data;
 			if (allMatching != null && !allMatching.isEmpty()) {
@@ -122,4 +146,5 @@ public class AutocompleteCustomArrayAdapter extends BaseAdapter implements
 	public Filter getFilter() {
 		return new MyFilter();
 	}
+
 }

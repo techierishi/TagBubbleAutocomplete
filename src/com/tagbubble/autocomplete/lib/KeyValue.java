@@ -1,4 +1,4 @@
-package com.example.autocompletetextviewcustomadapter;
+package com.tagbubble.autocomplete.lib;
 
 public class KeyValue {
 
@@ -43,6 +43,7 @@ public class KeyValue {
 	@Override
 	public String toString() {
 		return "[{\" key\" : \"" + key + "\"},{\" value\" : \"" + value
+				+ "\"},{\" shown\" : \"" + shown
 				+ "\"}]";
 	}
 

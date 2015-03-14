@@ -1,16 +1,12 @@
-package com.example.autocompletetextviewcustomadapter;
+package com.tagbubble.autocomplete.lib;
 
 import java.util.ArrayList;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements ACItemClickListener,
+		TagItemDeletedListener {
 
 	/*
 	 * Change to type CustomAutoCompleteView instead of AutoCompleteTextView
@@ -18,9 +14,10 @@ public class MainActivity extends Activity {
 	 * with the XML view, type will be CustomAutoCompleteView
 	 */
 	CustomAutoCompleteView myAutoComplete;
-	AutocompleteCustomArrayAdapter myAdapter;
+	AutocompleteCustomArrayAdapter<MainActivity> myAdapter;
+	CustomAutoCompleteTextChangedListener ccObj;
 	ArrayList<KeyValue> kvArr2;
-	TagAdapter tAdapter;
+	TagAdapter<MainActivity> tAdapter;
 
 	// adapter for auto-complete
 
@@ -46,30 +43,14 @@ public class MainActivity extends Activity {
 			kvArr2.add(new KeyValue("6", "Perl", false));
 			kvArr2.add(new KeyValue("7", "Python", false));
 
-			tAdapter = new TagAdapter(this, kvArr2);
+			tAdapter = new TagAdapter<MainActivity>(this, kvArr2);
 			// autocompletetextview is in activity_main.xml
 			myAutoComplete = (CustomAutoCompleteView) findViewById(R.id.myautocomplete);
 
-			myAutoComplete.setOnItemClickListener(new OnItemClickListener() {
+			ccObj = new CustomAutoCompleteTextChangedListener(this, kvArr2);
+			myAutoComplete.addTextChangedListener(ccObj);
 
-				@Override
-				public void onItemClick(AdapterView<?> parent, View arg1,
-						int pos, long id) {
-
-					kvArr2.get(pos).setShown(true);
-
-					tAdapter.changeData(kvArr2);
-					myAutoComplete.setText("");
-
-				}
-
-			});
-
-			myAutoComplete
-					.addTextChangedListener(new CustomAutoCompleteTextChangedListener(
-							this, kvArr2));
-
-			myAdapter = new AutocompleteCustomArrayAdapter(this,
+			myAdapter = new AutocompleteCustomArrayAdapter<MainActivity>(this,
 					R.layout.list_view_row_item, kvArr2);
 			myAutoComplete.setAdapter(myAdapter);
 
@@ -81,6 +62,43 @@ public class MainActivity extends Activity {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private int actualPosition(ArrayList<KeyValue> all_kvs,
+			KeyValue searchthis_kv) {
+		int i = 0;
+		if (all_kvs != null && !all_kvs.isEmpty()) {
+			for (KeyValue kv : all_kvs) {
+				if (kv.getKey().equals(searchthis_kv.getKey())) {
+					return i;
+				}
+
+				i++;
+			}
+		}
+		return -1;
+
+	}
+
+	@Override
+	public void onACItemClickListener(KeyValue kv) {
+		int position = actualPosition(kvArr2, kv);
+
+		kvArr2.get(position).setShown(true);
+
+		tAdapter.changeData(kvArr2);
+		myAutoComplete.setText("");
+
+	}
+
+	@Override
+	public void onTagItemsDeleted(KeyValue kv) {
+		int position = actualPosition(kvArr2, kv);
+		kvArr2.get(position).setShown(false);
+		tAdapter.changeData(kvArr2);
+		if (ccObj != null) {
+			ccObj.changeData(kvArr2);
 		}
 	}
 }

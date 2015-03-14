@@ -1,4 +1,4 @@
-package com.example.autocompletetextviewcustomadapter;
+package com.tagbubble.autocomplete.lib;
 
 import android.content.Context;
 import android.database.DataSetObserver;
